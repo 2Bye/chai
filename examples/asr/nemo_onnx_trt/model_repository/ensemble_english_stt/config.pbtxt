@@ -1,0 +1,60 @@
+name: "ensemble_english_stt"
+platform: "ensemble"
+max_batch_size: 8
+
+input [
+  {
+    name: "audio_signal"
+    data_type: TYPE_FP64
+    dims: [-1]
+  }
+]
+
+output [
+  {
+    name: "decoded_texts"
+    data_type: TYPE_STRING
+    dims: [1]
+  }
+]
+
+ensemble_scheduling {
+  step [
+    {
+      model_name: "preprocessing_english_stt"
+      model_version: -1
+      input_map {
+        key: "audio_signal"
+        value: "audio_signal"
+      }
+      output_map {
+        key: "processed_signal"
+        value: "signal"
+      }
+    },
+    {
+      model_name: "onnx_english_stt"
+      model_version: -1
+      input_map {
+        key: "signal"
+        value: "signal"
+      }
+      output_map {
+        key: "output"
+        value: "asr_output"
+      }
+    },
+    {
+      model_name: "postprocessing_english_stt"
+      model_version: -1
+      input_map {
+        key: "asr_output"
+        value: "asr_output"
+      }
+      output_map {
+        key: "decoded_texts"
+        value: "decoded_texts"
+      }
+    }
+  ]
+}

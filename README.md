@@ -31,7 +31,7 @@ ChAI aims to bridge the gap between powerful AI models and real-world production
 - [ ] Deploy VITS family TTS with ONNX & TensorRT
 - [ ] Emotion and voice modulation support in TTS models
 
-### Phase 4: Scaling and Cloud Deployment
+### Phase 3: Scaling and Cloud Deployment
 - [ ] Kubernetes deployment examples with auto-scaling
 - [ ] Cloud-native setups on AWS, GCP, Azure
 

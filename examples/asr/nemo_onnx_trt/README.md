@@ -13,6 +13,9 @@ This guide provides comprehensive examples and benchmarks for deploying optimize
 - **[3. Deploy on Triton Inference Server](Triton_deployment.md)**  
   Instructions and examples for structuring and deploying the models in Triton.
 
+- **[3. Testing Triton Inference Server](Testing_and_ModelAnalyzer.md)**  
+  Instructions and examples for structuring and deploying the models in Triton.
+
 ---
 
 _All actions described were performed within the Docker container **nvcr.io/nvidia/pytorch:24.05-py3**_

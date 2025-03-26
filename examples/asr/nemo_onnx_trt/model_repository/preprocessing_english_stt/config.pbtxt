@@ -1,0 +1,36 @@
+name: "preprocessing_english_stt"
+backend: "python"
+
+max_batch_size: 8
+
+dynamic_batching {
+  max_queue_delay_microseconds: 10000
+}
+
+instance_group [
+  {
+    kind: KIND_CPU
+    count: 1
+  }
+]
+
+input [
+  {
+    name: "audio_signal"
+    data_type: TYPE_FP64
+    dims: [-1]
+  }
+]
+
+output [
+  {
+    name: "processed_signal"
+    data_type: TYPE_FP32
+    dims: [80, -1]
+  },
+  {
+    name: "processed_signal_length"
+    data_type: TYPE_FP32
+    dims: [1]
+  }
+]
