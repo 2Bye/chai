@@ -133,13 +133,12 @@ Image used if launch mode is `docker`. Must match your model environment.
 
 After a successful run of model-analyzer, PDF reports are automatically generated in the export_path directory (e.g., profile_results/), one per profiled model.
 
-Each PDF contains:
+Each PDF contains (See example in [my PDF file](results.pdf)):
 
 📊 Graphs showing latency, throughput, GPU memory usage, and instance utilization across different configurations
 🔍 Tables with full performance metrics
 ✅ Highlighted best-performing configurations based on your constraints
 
-See example in [my PDF file](results.pdf)
 ---
 
 ## 📚 Additional Notes
