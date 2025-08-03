@@ -5,7 +5,6 @@ from nemo.collections.asr.modules import AudioToMelSpectrogramPreprocessor
 
 class TritonPythonModel:
     def initialize(self, args):
-        """Called once when the model is loaded."""
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.preprocessor = AudioToMelSpectrogramPreprocessor(features=80)
         self.preprocessor.to(self.device)

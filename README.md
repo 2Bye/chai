@@ -21,7 +21,7 @@ ChAI aims to bridge the gap between powerful AI models and real-world production
 
 ## 📌 Roadmap
 
-### Phase 1: Speech Models Integration
+### Phase 1: Speech-to-Text Models Integration
 - [x] **NeMo ASR English with ONNX & TensorRT optimization** (initial example)
 - [ ] Real-time streaming inference examples
 - [ ] Whisper multilingual models on Triton Inference Server
@@ -66,7 +66,7 @@ Open an issue or pull request to get involved!
 ---
 
 ## 📢 Stay Connected
-- [Telegram community](https://t.me/byebye)
+- [Telegram](https://t.me/byebye)
 
 ---
 

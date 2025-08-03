@@ -101,8 +101,6 @@ Create a Dockerfile with the following [content](Dockerfile):
 FROM nvcr.io/nvidia/tritonserver:24.08-py3
 
 RUN pip install git+https://github.com/NVIDIA/NeMo.git@v2.2.0rc3#egg=nemo_toolkit[asr]
-RUN pip install tensorrt==10.0.1
-
 COPY . /workspace
 
 EXPOSE 8000
@@ -127,3 +125,47 @@ docker run --gpus all -d --name {container_name} -p 8000:8000 -p 8001:8001 -p 80
 ```
 
 This structured setup ensures optimized performance and maintainability for NeMo ASR models deployed on Triton Inference Server.
+
+
+## 🟢 6. Call to the model
+
+We can invoke ensembles using both gRPC and HTTP protocols. Below is an example for HTTP:
+
+```python
+import numpy as np
+import tritonclient.http as httpclient
+
+
+def TritonInferenceClient_ENSEMBLE_STT(audio_signal, type_of_model):
+    """
+    Perform inference on an audio signal using the specified model.
+
+    Parameters:
+    audio_signal (numpy.ndarray): The input audio signal as a numpy array of type float64. [Batch, array]
+    type_of_model (str): The name of the model to use for inference. 
+        ensemble_tensorrt_english_stt or ensemble_english_stt
+
+    Returns:
+    numpy.ndarray: The decoded texts from the inference results.
+
+    Raises:
+    ValueError: If the input audio_signal is not a numpy array of type float64.
+    """
+    if not isinstance(audio_signal, np.ndarray) or audio_signal.dtype != np.float64:
+        raise ValueError("Input must be a numpy array of type float64.")
+    
+    client = httpclient.InferenceServerClient(url="0.0.0.0:8000") ### Change
+    
+    inputs = [httpclient.InferInput("audio_signal", audio_signal.shape, "FP64")]
+    inputs[0].set_data_from_numpy(audio_signal)
+
+    outputs = httpclient.InferRequestedOutput("decoded_texts", binary_data=False)
+    
+    results = client.infer(model_name=type_of_model, inputs=inputs, outputs=[outputs])
+
+    return results.as_numpy("decoded_texts")
+```
+
+## Next Steps
+- [Benchmark performance](Testing_and_ModelAnalyzer.md)
+- Integrate modules into your application pipeline.

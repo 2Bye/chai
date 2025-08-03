@@ -14,18 +14,18 @@ This tutorial provides detailed instructions on converting a NeMo ASR model from
 
 ### 🟢 Step 1: Prepare Environment
 
-Use the NVIDIA Docker container (`nvcr.io/nvidia/pytorch:24.05-py3`):
+It is important to use the same versions of CUDA drivers and TensorRT packages that will be used on the inference instance. This ensures compatibility and stability of the model's performance. Make sure that the versions of CUDA and TensorRT in your environment match those installed on the inference server. You can verify this using the commands `nvcc --version` for CUDA and `dpkg -l | grep tensorrt` for TensorRT within the container.
+
+In these examples, we will use Triton Inference Server version `nvcr.io/nvidia/tritonserver:25.02-py3`. Therefore, we must convert our ONNX file to TensorRT using the same container of this version. This will ensure compatibility and stability of the model's performance on the Triton server.
+
+Use the NVIDIA Docker container (`nvcr.io/nvidia/tritonserver:25.02-py3`):
+
+We need to mount the directory containing our ONNX file into the container. This allows the container to access the ONNX file for conversion to TensorRT.
 
 ```bash
 docker run --gpus all -it --rm \
   -v $(pwd):/workspace \
-  nvcr.io/nvidia/pytorch:24.05-py3 /bin/bash
-```
-
-Install required tools:
-
-```bash
-pip install onnx onnxruntime-gpu==1.19 tensorrt==10.0.1
+  nvcr.io/nvidia/tritonserver:25.02-py3
 ```
 
 Ensure CUDA and TensorRT are available in the container.
@@ -35,21 +35,17 @@ Ensure CUDA and TensorRT are available in the container.
 Use NVIDIA's official tool `trtexec`:
 
 ```bash
-trtexec \
+/usr/src/tensorrt/bin/trtexec \
   --onnx=model.onnx \
   --saveEngine=model.plan \
-  --fp16 \
-  --workspace=4096 \
-  --explicitBatch \
   --minShapes=signal:1x80x128 \
   --optShapes=signal:4x80x512 \
   --maxShapes=signal:8x80x2048
 ```
 
 Parameters explained:
-- `--fp16`: Enables FP16 precision for faster inference.
-- `--workspace`: Allocates GPU memory (in MB) for optimization.
-- `--explicitBatch`: Enables explicit batch dimension handling.
+- `onnx` : Path to onnx model
+- `saveEngine`: Path to TensorRT model
 - `minShapes`, `optShapes`, `maxShapes`: Defines dynamic input shapes for optimal performance.
 
 ### 🟢 Step 3: Validate the TensorRT Model
@@ -57,12 +53,12 @@ Parameters explained:
 Check model inference:
 
 ```bash
-trtexec --loadEngine=model.plan --shapes=signal:4x80x500
+/usr/src/tensorrt/bin/trtexec --loadEngine=model.plan --shapes=signal:4x80x500
 ```
 
 Ensure the model runs without errors.
 
 ## Next Steps
-- Deploy modules to Triton.
-- Benchmark performance.
+- [Deploy modules to Triton](Triton_deployment.md)
+- [Benchmark performance](Testing_and_ModelAnalyzer.md)
 - Integrate modules into your application pipeline.

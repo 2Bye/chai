@@ -22,7 +22,7 @@ class TritonPythonModel:
             decoded_texts = self.ctc_decoder(ctc_output_tensor, decoder_lengths=None)
             decoded_texts = [i.text for i in decoded_texts]
 
-            decoded_texts_numpy = np.array(decoded_texts, dtype=np.object)
+            decoded_texts_numpy = np.array(decoded_texts, dtype=object)
 
             output_tensor = pb_utils.Tensor("decoded_texts", decoded_texts_numpy)
 
