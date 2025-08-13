@@ -16,6 +16,10 @@ This guide provides comprehensive examples and benchmarks for deploying optimize
 - **[4. Testing Triton Inference Server](Testing_and_ModelAnalyzer.md)**  
   Instructions and examples for structuring and deploying the models in Triton.
 
+## Soon
+
+- Add RAY cluster support
+
 ---
 
-_All actions described were performed within the Docker container **nvcr.io/nvidia/pytorch:24.05-py3**_
+_All actions described were performed within the Docker container **nvcr.io/nvidia/pytorch:24.08-py3**_
